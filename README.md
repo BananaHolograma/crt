@@ -2,7 +2,7 @@
 
 # crt
 
-Abusing Certificate Transparency logs for getting subdomains from a root domain. The process is very clean, a light http request to [crt.sh](https://crt.sh) to fetch the subdomain information in a manipulatable format supporting multiple root domains at once.
+`crt` abuse certificate transparency logs for getting subdomains from a one or multiple root domains. The process is very clean, a light http request to [crt.sh](https://crt.sh) to fetch the subdomain information in a manipulatable format supporting multiple root domains at once.
 
 ## Usage
 
