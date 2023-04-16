@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-declare -g OUTPUT_PATH=''
+declare -g OUTPUT_PATH='./'
 declare -i THREADS=10
-CACHE_PATH='.crt-cache'
+declare -g CACHE_PATH='.crt-cache'
 
 [[ ! -f "$CACHE_PATH" ]] && mkdir -m 0755 -p "$CACHE_PATH"
 
@@ -18,7 +18,9 @@ function extract_subdomains_from_source() {
 function fetch_subdomains() {
     local ROOT_DOMAIN=$1
     local OUTPUT_PATH=$2
-    local BASE_FILENAME="${ROOT_DOMAIN}_certificate_transparency_subdomain_list.txt"
+    local CACHE_PATH=$3
+
+    local BASE_FILENAME="${ROOT_DOMAIN}_certificate_transparency_subdomain_list.html"
     local WORK_PATH="$CACHE_PATH/$BASE_FILENAME"
     local SUBDOMAIN_PATH="${OUTPUT_PATH}subdomains_$ROOT_DOMAIN.txt"
 
@@ -28,8 +30,8 @@ function fetch_subdomains() {
 
         if [[ -f "$WORK_PATH" ]]; then
             extract_subdomains_from_source "$ROOT_DOMAIN" "$WORK_PATH" "$SUBDOMAIN_PATH"
-        elif curl -Ls -o "$WORK_PATH" "https://crt.sh/?q=$ROOT_DOMAIN"; then 
-            chmod 0755 "$WORK_PATH"
+        elif curl --tcp-fastopen --tcp-nodelay --fail -Ls -o "$WORK_PATH" "https://crt.sh/?q=$ROOT_DOMAIN"; then 
+            chmod 0755 "$WORK_PATH"                                             
             extract_subdomains_from_source "$ROOT_DOMAIN" "$WORK_PATH" "$SUBDOMAIN_PATH"
         else 
             echo -e "[ FAILED ]The request to https://crt.sh/?q=$ROOT_DOMAIN has failed"
@@ -107,11 +109,10 @@ fi
 [[ -z $DOMAINS ]] && echo -e "No domains has been provided to the script" \
     || DOMAINS=$(echo "$DOMAINS" | tr ',|-_/: ' '\n')
 
-if [[ -n $OUTPUT_PATH ]]; then 
+if [[ -n $OUTPUT_PATH && $OUTPUT_PATH != './' ]]; then 
     mkdir -p "$OUTPUT_PATH"
     chmod 0755 "$OUTPUT_PATH"
 fi 
 
-
-echo "$DOMAINS" | xargs -I {} -P"$THREADS" bash -c "fetch_subdomains {} $OUTPUT_PATH"
+echo "$DOMAINS" | xargs -I {} -P"$THREADS" bash -c "fetch_subdomains {} $OUTPUT_PATH $CACHE_PATH"
 wait

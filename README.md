@@ -39,12 +39,20 @@ OPTIONS:
 ### Simple enumeration from file
 
 ```bash
+### subdomains.txt
+hilton.io
+tesla.com
+indriver.com
+###
+
 cat subdomains.txt | bash crt.sh
 
-[-] Fetching certificate transparency history for domain example.com ...
-[-] Fetching certificate transparency history for domain example3.com ...
-[-] Fetching certificate transparency history for domain example2.com ...
-[-] Fetching certificate transparency history for domain example4.com ...
+[-] Fetching certificate transparency history for domain hilton.io ...
+[-] Fetching certificate transparency history for domain indriver.com ...
+[-] Fetching certificate transparency history for domain tesla.com ...
+[+] Found 43 results for indriver.com
+[+] Found 15 results for hilton.io
+[+] Found 159 results for tesla.com
 ```
 
 ### Enumeration from raw text
