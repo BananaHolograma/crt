@@ -107,7 +107,7 @@ else
 fi 
 
 [[ -z $DOMAINS ]] && echo -e "No domains has been provided to the script" \
-    || DOMAINS=$(echo "$DOMAINS" | tr ',|-_/: ' '\n')
+    || DOMAINS=$(echo "$DOMAINS" | tr '_|, :/' '\n')
 
 if [[ -n $OUTPUT_PATH && $OUTPUT_PATH != './' ]]; then 
     mkdir -p "$OUTPUT_PATH"
