@@ -20,7 +20,7 @@ function fetch_subdomains() {
     local OUTPUT_PATH=$2
     local CACHE_PATH=$3
 
-    local BASE_FILENAME="${ROOT_DOMAIN}_certificate_transparency_subdomain_list.html"
+    local BASE_FILENAME="${ROOT_DOMAIN}.html"
     local WORK_PATH="$CACHE_PATH/$BASE_FILENAME"
     local SUBDOMAIN_PATH="${OUTPUT_PATH}subdomains_$ROOT_DOMAIN.txt"
 
