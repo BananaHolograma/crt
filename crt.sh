@@ -2,7 +2,7 @@
 
 declare -g OUTPUT_PATH='./'
 declare -i THREADS=10
-declare -g CACHE_PATH='.crt-cache'
+declare -g CACHE_PATH='/tmp/.crt-cache'
 
 [[ ! -f "$CACHE_PATH" ]] && mkdir -m 0755 -p "$CACHE_PATH"
 
@@ -11,7 +11,7 @@ function extract_subdomains_from_source() {
     local WORK_PATH=$2
     local SUBDOMAIN_PATH=$3
     
-    grep -Eo '<TD>[*]?[[:alnum:].-]+</TD>' "$WORK_PATH" | sed -E 's/<\/?TD>//g' | sort -u > "$SUBDOMAIN_PATH"
+    grep -Eo '<TD>[*]?[[:alnum:].-]+</TD>' "$WORK_PATH" | sed -E 's/<\/?TD>//g' | grep -wi "$ROOT_DOMAIN" | sort -u > "$SUBDOMAIN_PATH"
     echo -e "\033[2K[+] Found $(wc -l "$SUBDOMAIN_PATH" | grep -Eo '[0-9]+') results for $ROOT_DOMAIN"
 }
 
